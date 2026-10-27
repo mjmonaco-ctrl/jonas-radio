@@ -11,5 +11,6 @@ window.addEventListener('load', misura);
 new ResizeObserver(misura).observe(canvas);
 misura();
 nuovoSegnale();
-requestAnimationFrame(disegna);
+requestAnimationFrame(disegna);window.addEventListener('load', misura);
+new ResizeObserver(misura).observe(canvas);
 </script></body></html>
