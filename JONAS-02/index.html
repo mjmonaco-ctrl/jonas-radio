@@ -6,5 +6,10 @@ function misura(){const d=Math.min(devicePixelRatio||1,2);canvas.width=Math.roun
 function nuovoSegnale(){valori=Array.from({length:80},()=>{let y=(Math.random()-.5)*5;if(Math.random()<.1)y+=(Math.random()-.5)*22;return y})}
 function disegna(t){if(attivo){if(t-ultimo>140){nuovoSegnale();ultimo=t}ctx.clearRect(0,0,canvas.width,canvas.height);ctx.beginPath();const centro=canvas.height/2,passo=canvas.width/(valori.length-1),scala=canvas.height/110;valori.forEach((v,i)=>{let x=i*passo,y=centro+v*scala;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.strokeStyle='#BBDDFF';ctx.lineWidth=Math.max(1,canvas.height*.035);ctx.lineJoin='round';ctx.lineCap='round';ctx.shadowColor='#BBDDFF';ctx.shadowBlur=10;ctx.stroke()}else{ctx.clearRect(0,0,canvas.width,canvas.height);ctx.beginPath();ctx.moveTo(0,canvas.height/2);ctx.lineTo(canvas.width,canvas.height/2);ctx.strokeStyle='#BBDDFF';ctx.lineWidth=Math.max(1,canvas.height*.02);ctx.shadowColor='#BBDDFF';ctx.shadowBlur=5;ctx.stroke()}requestAnimationFrame(disegna)}
 function aggiorna(){attivo=!audio.paused&&!audio.ended;btn.setAttribute('aria-pressed',String(attivo));btn.setAttribute('aria-label',attivo?'Metti in pausa la trasmissione':'Avvia la trasmissione di Jonas');stato.textContent=attivo?'Trasmissione in corso — premi per interrompere':'Premi il pulsante luminoso per ascoltare Jonas'}
-btn.addEventListener('click',async()=>{if(audio.paused){try{await audio.play()}catch(e){stato.textContent='Impossibile avviare l’audio: '+e.message}}else audio.pause();aggiorna()});audio.addEventListener('play',aggiorna);audio.addEventListener('pause',aggiorna);audio.addEventListener('ended',()=>{audio.currentTime=0;aggiorna()});window.addEventListener('resize',misura);misura();nuovoSegnale();requestAnimationFrame(disegna);
+btn.addEventListener('click',async()=>{if(audio.paused){try{await audio.play()}catch(e){stato.textContent='Impossibile avviare l’audio: '+e.message}}else audio.pause();aggiorna()});audio.addEventListener('play',aggiorna);audio.addEventListener('pause',aggiorna);audio.addEventListener('ended',()=>{audio.currentTime=0;aggiorna()});window.addEventListener('resize', misura);
+window.addEventListener('load', misura);
+new ResizeObserver(misura).observe(canvas);
+misura();
+nuovoSegnale();
+requestAnimationFrame(disegna);
 </script></body></html>
